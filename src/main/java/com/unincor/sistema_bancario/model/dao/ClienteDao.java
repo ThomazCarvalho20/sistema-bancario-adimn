@@ -47,14 +47,7 @@ public class ClienteDao {
                 PreparedStatement ps = con.prepareStatement(sql)){
               ResultSet rs = ps.executeQuery();
               while(rs.next()) {
-                  Cliente cliente = new Cliente();
-                  cliente.setIdCliente(rs.getLong("id_cliente"));
-                  cliente.setNome(rs.getString("nome"));
-                  cliente.setCpf(rs.getString("cpf"));
-                  cliente.setDataNascimento(rs.getDate("data_nascimento").toLocalDate());
-                  cliente.setEmail(rs.getString("email"));
-                  cliente.setTelefone(rs.getString("telefone"));
-                  cliente.setSenhaHash(rs.getString("senha_Hash"));
+                  var cliente = construirClienteSql(rs);
                   clientes.add(cliente);
               }
           } catch (SQLException ex) {
@@ -62,15 +55,43 @@ public class ClienteDao {
         }
         return clientes;
       }
+      
+       public Cliente buscarClientePorId(Long idCliente){
+          String sql = "SELECT * FROM clientes WHERE id_cliente = ?";
+          try(Connection con = MySQL.connect();
+                PreparedStatement ps = con.prepareStatement(sql)){
+                ps.setLong(1, idCliente);
+              ResultSet rs = ps.executeQuery();
+              if (rs.next()) {
+                  return construirClienteSql(rs);
+              }
+          } catch (SQLException ex) {
+            Logger.getLogger(ClienteDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+      }
+       
+       public Cliente construirClienteSql(ResultSet rs) throws SQLException{
+       Cliente cliente = new Cliente();
+                  cliente.setIdCliente(rs.getLong("id_cliente"));
+                  cliente.setNome(rs.getString("nome"));
+                  cliente.setCpf(rs.getString("cpf"));
+                  cliente.setDataNascimento(rs.getDate("data_nascimento").toLocalDate());
+                  cliente.setEmail(rs.getString("email"));
+                  cliente.setTelefone(rs.getString("telefone"));
+                  cliente.setSenhaHash(rs.getString("senha_Hash"));
+                  return cliente;
+       }
     
     public static void main(String[] args) {
-        Cliente cliente = new Cliente(null, "Thomaz", "21324654", LocalDate.now(),
-                "thomaz.carvalho@aluno.unincor.edu.br", "4564654897", "389102312749128903");
+//        Cliente cliente = new Cliente(null, "Thomaz", "21324654", LocalDate.now(),
+//                "thomaz.carvalho@aluno.unincor.edu.br", "4564654897", "389102312749128903");
         ClienteDao clienteDao = new ClienteDao();
-        var clientes = clienteDao.buscarTodosClientes();
-        System.out.println(clientes);
-        clientes.forEach(c -> System.out.println("Id: " + c.getIdCliente() + "/ Nome: " + c.getNome( ) + "/ Cpf: " + c.getCpf() + "/ Data de Nascimento: " + c.getDataNascimento() +
-              "/ Data de Nascimento: " + c.getDataNascimento()+ "/ Email: " + c.getEmail() + "/ Telefone: " + c.getTelefone() + "/ Senha: " + c.getSenhaHash() ));
-        
+//        var clientes = clienteDao.buscarTodosClientes();
+//        System.out.println(clientes);
+//        clientes.forEach(c -> System.out.println("Id: " + c.getIdCliente() + "/ Nome: " + c.getNome( ) + "/ Cpf: " + c.getCpf() + "/ Data de Nascimento: " + c.getDataNascimento() +
+//              "/ Data de Nascimento: " + c.getDataNascimento()+ "/ Email: " + c.getEmail() + "/ Telefone: " + c.getTelefone() + "/ Senha: " + c.getSenhaHash() ));
+        var c = clienteDao.buscarClientePorId(1l);
+        System.out.println("Id: " + c.getIdCliente() + " - Nome: " + c.getNome());
     }
 }
