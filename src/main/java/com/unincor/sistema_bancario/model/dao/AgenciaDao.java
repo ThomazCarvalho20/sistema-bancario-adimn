@@ -79,6 +79,21 @@ public class AgenciaDao {
         agencia.setCep(rs.getString("cep"));
         return agencia;
     }
+    
+    public Agencia buscarClientePorCodigoAgencia(String codigo_agencia) {
+        String sql = "SELECT * FROM agencias WHERE codigo_agencia = ?";
+        try (Connection con = MySQL.connect(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, codigo_agencia);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return construirAgenciaSql(rs);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     public static void main(String[] args) {
         AgenciaDao agenciaDao = new AgenciaDao();
         
@@ -99,5 +114,5 @@ public class AgenciaDao {
         
         
     }
-    
+
 }
