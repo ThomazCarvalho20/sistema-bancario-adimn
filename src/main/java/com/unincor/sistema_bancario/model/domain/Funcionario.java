@@ -5,20 +5,21 @@
 package com.unincor.sistema_bancario.model.domain;
 
 import java.time.LocalDate;
-
 /**
  *
  * @author Thomaz
  */
-public abstract class Pessoa {
+public class Funcionario {
+    private Long idFuncio;
     protected String nome;
     protected String cpf;
     protected LocalDate dataNascimento;
     protected String email;
     protected String telefone;
     protected String senhaHash;
+    protected String turno;
     
-    public Pessoa(){
+    public Funcionario(){
     }
 
     public String getNome() {
@@ -69,4 +70,31 @@ public abstract class Pessoa {
         this.senhaHash = senhaHash;
     }
 
+    public String getTurno() {
+        return turno;
+    }
+
+    public void setTurno(String turno) {
+        this.turno = turno;
+    }
+
+    public void setIdFuncionario(long aLong) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public String getIdFuncionario() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void setIdGerente(long aLong) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void setGerente(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public String getIdGerente() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

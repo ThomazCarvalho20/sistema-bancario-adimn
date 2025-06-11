@@ -11,6 +11,10 @@ import java.time.LocalDate;
  * @author Thomaz
  */
 public class Gerente extends Pessoa{
+
+    public static Object getGerente() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
     private Long idGerente;
     private Agencia agencia;
@@ -32,6 +36,14 @@ public class Gerente extends Pessoa{
 
     public void setAgencia(Agencia agencia) {
         this.agencia = agencia;
+    }
+
+    public String getIdAgencia() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void setGerente(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
   
 }

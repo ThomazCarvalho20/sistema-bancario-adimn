@@ -111,17 +111,21 @@ public class TelaListagemAgencias extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        var agencias = agenciaService.buscarAgencias();
-        TabelaAgencia tab = (TabelaAgencia) jTable1.getModel();
-        tab.setAgencias(agencias);
+        pesquisar();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        var tela = new TelaCadastroAgencia(this, true);
+        ChamadaRetorno chamadaRetorno = () -> pesquisar(); /*Recurso de uma função () - Diz que é uma função 'pesquisar' diz que é uma chamada*/
+        var tela = new TelaCadastroAgencia(this, true, chamadaRetorno);
         tela.setVisible(true);
         setLocationRelativeTo(tela);
     }//GEN-LAST:event_jButton2ActionPerformed
-
+    
+    public void pesquisar(){
+    var agencias = agenciaService.buscarAgencias();
+        TabelaAgencia tab = (TabelaAgencia) jTable1.getModel();
+        tab.setAgencias(agencias);
+    }
     /**
      * @param args the command line arguments
      */
