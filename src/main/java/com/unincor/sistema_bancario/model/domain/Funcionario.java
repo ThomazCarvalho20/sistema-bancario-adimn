@@ -10,7 +10,7 @@ import java.time.LocalDate;
  * @author Thomaz
  */
 public class Funcionario {
-    private Long idFuncio;
+    private Long idFuncionario;
     protected String nome;
     protected String cpf;
     protected LocalDate dataNascimento;

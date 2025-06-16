@@ -37,7 +37,7 @@ public class AgenciaService {
         if (agencia.getCidade() == null || agencia.getCidade() .isBlank()) {
             throw new CadastroException ("A agência não possui" + "uma cidade informada!");
         }
-        
+        // verificar se uma String está vazia ou contém apenas espaços em branco (ou outros caracteres considerados "brancos", como tabulações e quebras de linha).
          if (agencia.getUf() == null || agencia.getUf() .isBlank()) {
             throw new CadastroException ("A agência não possui" + "um estado!");
         }
