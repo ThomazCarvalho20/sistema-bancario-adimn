@@ -27,7 +27,7 @@ public class ClienteService {
         }
 
         // Criar uma validação se o cpf do cliente já está cadastrado
-        clienteDao.buscarClientePorCpfCliente(cliente.getCpf());
+        clienteDao.buscarClientePorId(cliente.getIdCliente());
         if (clienteBusca != null) {
             throw new CadastroException("Cliente já está cadastrado!");
         }
@@ -47,7 +47,7 @@ public class ClienteService {
 
     public List<Cliente> buscarClientes() {
 
-        return clienteDao.listarTodasClientes();
+        return clienteDao.buscarTodosClientes();
 
     }
 

@@ -25,10 +25,10 @@ public class GerenteService {
             throw new CadastroException("Gerente não possui" + "um cpf cadastrado!");
         }
 
-        // Criar uma validação se o cpf do gerente já está cadastrado
-        gerenteDao.buscarGerentePorCpfGerente(gerente.getCpf());
+        // Criar uma validação se o id do gerente já está cadastrado
+        gerenteDao.buscarGerentePorId(gerente.getIdGerente());
         if (gerenteBuscar != null) {
-            throw new CadastroException("CPF de Gerente já está cadastrado!");
+            throw new CadastroException("ID de Gerente já está cadastrado!");
         }
 
         // Validar se o gerente está com telefone preenchidos
@@ -36,7 +36,7 @@ public class GerenteService {
             throw new CadastroException("O gerente não possui" + "um telefone informado!");
         }
         // is.Blank() - verificar se uma String está vazia ou contém apenas espaços em branco (ou outros caracteres considerados "brancos", como tabulações e quebras de linha).
-        if (gerente.getIdAgencia() == null || gerente.getIdAgencia().isBlank()) {
+        if (gerente.getAgencia()== null || gerente.getAgencia().getNumero().isBlank()) {
             throw new CadastroException("O gerente não possui" + "uma agência!");
         }
 
@@ -46,7 +46,7 @@ public class GerenteService {
 
     public List<Gerente> buscarGerentes() {
 
-        return gerenteDao.listarTodasGerentes();
+        return gerenteDao.buscarTodosGerentes();
 
     }
 

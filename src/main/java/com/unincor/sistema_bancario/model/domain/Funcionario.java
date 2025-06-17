@@ -18,6 +18,14 @@ public class Funcionario {
     protected String telefone;
     protected String senhaHash;
     protected String turno;
+
+    public Long getIdFuncionario() {
+        return idFuncionario;
+    }
+
+    public void setIdFuncionario(Long idFuncionario) {
+        this.idFuncionario = idFuncionario;
+    }
     
     public Funcionario(){
     }
@@ -78,7 +86,7 @@ public class Funcionario {
         this.turno = turno;
     }
 
-    public void setIdFuncionario(long aLong) {
+   /* public void setIdFuncionario(long aLong) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -96,5 +104,5 @@ public class Funcionario {
 
     public String getIdGerente() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    }*/
 }

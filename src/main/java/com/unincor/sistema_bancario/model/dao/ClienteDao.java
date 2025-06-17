@@ -94,12 +94,4 @@ public class ClienteDao {
         var c = clienteDao.buscarClientePorId(1l);
         System.out.println("Id: " + c.getIdCliente() + " - Nome: " + c.getNome());
     }
-
-    public void buscarClientePorCpfCliente(String cpf) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    public List<Cliente> listarTodasClientes() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

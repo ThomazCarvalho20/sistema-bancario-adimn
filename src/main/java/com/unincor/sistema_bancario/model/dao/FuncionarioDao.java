@@ -11,6 +11,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,11 +39,28 @@ public class FuncionarioDao {
         }
         return funcionario;
     }
-
+    
+    public List<Funcionario> buscarTodosFuncionarios(){
+          List<Funcionario> funcionarios = new ArrayList<>();
+          String sql = "SELECT * FROM funcionario";
+          try(Connection con = MySQL.connect();
+                PreparedStatement ps = con.prepareStatement(sql)){
+              ResultSet rs = ps.executeQuery();
+              while(rs.next()) {
+                  var funcionario = construirFuncionarioSql(rs);
+                  funcionarios.add(funcionario);
+              }
+          } catch (SQLException ex) {
+            Logger.getLogger(FuncionarioDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return funcionarios;
+      }
+    
     public Funcionario buscarFuncionarioPorId(Long idFuncionario) {
         String sql = "SELECT * FROM funcionarios WHERE id_funcionario = ?";
         try (Connection con = MySQL.connect(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setLong(1, idFuncionario);
+            /*setLong - Não da certo se for null / setObject - executa com o valor null*/
+            ps.setObject(1, idFuncionario);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return construirFuncionarioSql(rs);
@@ -67,12 +85,12 @@ public class FuncionarioDao {
     }
 
     public static void main(String[] args) {
-//        Cliente cliente = new Cliente(null, "Thomaz", "21324654", LocalDate.now(),
+//        Funcionario funcionario = new Funcionario(null, "Thomaz", "21324654", LocalDate.now(),
 //                "thomaz.carvalho@aluno.unincor.edu.br", "4564654897", "389102312749128903");
         FuncionarioDao funcionarioDao = new FuncionarioDao();
-//        var clientes = clienteDao.buscarTodosClientes();
-//        System.out.println(clientes);
-//        clientes.forEach(c -> System.out.println("Id: " + c.getIdCliente() + "/ Nome: " + c.getNome( ) + "/ Cpf: " + c.getCpf() + "/ Data de Nascimento: " + c.getDataNascimento() +
+//        var funcionarios = funcionarioDao.buscarTodosFuncionarios();
+//        System.out.println(funcionarios);
+//        funcionarios.forEach(c -> System.out.println("Id: " + c.getIdFuncionario() + "/ Nome: " + c.getNome( ) + "/ Cpf: " + c.getCpf() + "/ Data de Nascimento: " + c.getDataNascimento() +
 //              "/ Data de Nascimento: " + c.getDataNascimento()+ "/ Email: " + c.getEmail() + "/ Telefone: " + c.getTelefone() + "/ Senha: " + c.getSenhaHash() ));
         var f = funcionarioDao.buscarFuncionarioPorId(1l);
         if (f != null) {
@@ -82,11 +100,11 @@ public class FuncionarioDao {
         }
     }
 
-    public void buscarFuncionarioPorCpfFuncionario(String cpf) {
+    /*public void buscarFuncionarioPorCpfFuncionario(String cpf) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     public List<Funcionario> listarTodasFuncionarios() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    }*/
 }

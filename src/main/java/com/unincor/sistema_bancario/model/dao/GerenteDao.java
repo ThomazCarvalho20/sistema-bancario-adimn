@@ -11,6 +11,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,14 +33,30 @@ public class GerenteDao {
             ps.setString(4, gerente.getEmail());
             ps.setString(5, gerente.getTelefone());
             ps.setString(6, gerente.getSenhaHash());
-            ps.setString(7, gerente.getIdAgencia());
+            ps.setLong(7, gerente.getAgencia().getIdAgencia());
             ps.execute();
         } catch (SQLException ex) {
             Logger.getLogger(GerenteDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return gerente;
     }
-
+    
+    public List<Gerente> buscarTodosGerentes(){
+          List<Gerente> gerente = new ArrayList<>();
+          String sql = "SELECT * FROM gerentes";
+          try(Connection con = MySQL.connect();
+                PreparedStatement ps = con.prepareStatement(sql)){
+              ResultSet rs = ps.executeQuery();
+              while(rs.next()) {
+                  var cliente = construirGerenteSql(rs);
+                  gerente.add(cliente);
+              }
+          } catch (SQLException ex) {
+            Logger.getLogger(GerenteDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return gerente;
+      }
+    
     public Gerente buscarGerentePorId(Long idGerente) {
         String sql = "SELECT * FROM gerentes WHERE id_gerente = ?";
         try (Connection con = MySQL.connect(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -63,17 +80,17 @@ public class GerenteDao {
         gerente.setEmail(rs.getString("email"));
         gerente.setTelefone(rs.getString("telefone"));
         gerente.setSenhaHash(rs.getString("senha_Hash"));
-        gerente.setGerente(rs.getString("id_agencia"));
+        long idAgencia = rs.getLong("agencia");
         return gerente;
     }
 
     public static void main(String[] args) {
-//        Cliente cliente = new Cliente(null, "Thomaz", "21324654", LocalDate.now(),
+//        Gerente cliente = new Gerente(null, "Thomaz", "21324654", LocalDate.now(),
 //                "thomaz.carvalho@aluno.unincor.edu.br", "4564654897", "389102312749128903");
         GerenteDao gerenteDao = new GerenteDao();
-//        var clientes = clienteDao.buscarTodosClientes();
-//        System.out.println(clientes);
-//        clientes.forEach(c -> System.out.println("Id: " + c.getIdCliente() + "/ Nome: " + c.getNome( ) + "/ Cpf: " + c.getCpf() + "/ Data de Nascimento: " + c.getDataNascimento() +
+//        var gerente = clienteDao.buscarTodosGerentes();
+//        System.out.println(gerente);
+//        gerente.forEach(c -> System.out.println("Id: " + c.getIdGerente() + "/ Nome: " + c.getNome( ) + "/ Cpf: " + c.getCpf() + "/ Data de Nascimento: " + c.getDataNascimento() +
 //              "/ Data de Nascimento: " + c.getDataNascimento()+ "/ Email: " + c.getEmail() + "/ Telefone: " + c.getTelefone() + "/ Senha: " + c.getSenhaHash() ));
         var g = gerenteDao.buscarGerentePorId(1l);
         if (g != null) {
@@ -83,11 +100,8 @@ public class GerenteDao {
         }
     }
 
+    /* Erro de que não tem o metodo, não criar, tem algo errado no services e não puxa o metodo domain
     public void buscarGerentePorCpfGerente(String cpf) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    public List<Gerente> listarTodasGerentes() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    }*/
 }

@@ -26,9 +26,9 @@ public class FuncionarioService {
         }
 
         // Criar uma validação se o cpf do funcionario já está cadastrado
-        funcionarioDao.buscarFuncionarioPorCpfFuncionario(funcionario.getCpf());
+        funcionarioDao.buscarFuncionarioPorId(Long.MIN_VALUE);
         if (funcionarioBusca != null) {
-            throw new CadastroException("CPF de Funcionario já está cadastrado!");
+            throw new CadastroException("o fucionário já tem um id");
         }
 
         // Validar se o funcionario está com telefone preenchidos
@@ -44,9 +44,9 @@ public class FuncionarioService {
 
     }
 
-    public List<Funcionario> buscarFuncionarios() {
+    public List<Funcionario> buscarTodosFuncionarios() {
 
-        return funcionarioDao.listarTodasFuncionarios();
+        return funcionarioDao.buscarTodosFuncionarios();
 
     }
 
