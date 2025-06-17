@@ -10,12 +10,12 @@ import java.time.LocalDate;
  *
  * @author Thomaz
  */
-public class Gerente extends Pessoa{
-    
+public class Gerente extends Pessoa {
+
     private Long idGerente;
     private Agencia agencia;
-    
-    public Gerente(){
+
+    public Gerente() {
     }
 
     public Long getIdGerente() {
@@ -33,7 +33,4 @@ public class Gerente extends Pessoa{
     public void setAgencia(Agencia agencia) {
         this.agencia = agencia;
     }
-
 }
-
-    

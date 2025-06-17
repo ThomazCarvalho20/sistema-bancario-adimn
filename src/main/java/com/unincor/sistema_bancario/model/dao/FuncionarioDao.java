@@ -11,6 +11,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -39,23 +40,22 @@ public class FuncionarioDao {
         }
         return funcionario;
     }
-    
-    public List<Funcionario> buscarTodosFuncionarios(){
-          List<Funcionario> funcionarios = new ArrayList<>();
-          String sql = "SELECT * FROM funcionario";
-          try(Connection con = MySQL.connect();
-                PreparedStatement ps = con.prepareStatement(sql)){
-              ResultSet rs = ps.executeQuery();
-              while(rs.next()) {
-                  var funcionario = construirFuncionarioSql(rs);
-                  funcionarios.add(funcionario);
-              }
-          } catch (SQLException ex) {
+
+    public List<Funcionario> buscarTodosFuncionarios() {
+        List<Funcionario> funcionarios = new ArrayList<>();
+        String sql = "SELECT * FROM funcionarios";
+        try (Connection con = MySQL.connect(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                var funcionario = construirFuncionarioSql(rs);
+                funcionarios.add(funcionario);
+            }
+        } catch (SQLException ex) {
             Logger.getLogger(FuncionarioDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return funcionarios;
-      }
-    
+    }
+
     public Funcionario buscarFuncionarioPorId(Long idFuncionario) {
         String sql = "SELECT * FROM funcionarios WHERE id_funcionario = ?";
         try (Connection con = MySQL.connect(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -84,27 +84,25 @@ public class FuncionarioDao {
         return funcionario;
     }
 
+   
     public static void main(String[] args) {
-//        Funcionario funcionario = new Funcionario(null, "Thomaz", "21324654", LocalDate.now(),
-//                "thomaz.carvalho@aluno.unincor.edu.br", "4564654897", "389102312749128903");
-        FuncionarioDao funcionarioDao = new FuncionarioDao();
-//        var funcionarios = funcionarioDao.buscarTodosFuncionarios();
-//        System.out.println(funcionarios);
-//        funcionarios.forEach(c -> System.out.println("Id: " + c.getIdFuncionario() + "/ Nome: " + c.getNome( ) + "/ Cpf: " + c.getCpf() + "/ Data de Nascimento: " + c.getDataNascimento() +
-//              "/ Data de Nascimento: " + c.getDataNascimento()+ "/ Email: " + c.getEmail() + "/ Telefone: " + c.getTelefone() + "/ Senha: " + c.getSenhaHash() ));
-        var f = funcionarioDao.buscarFuncionarioPorId(1l);
+        /*
+        Funcionario funcionario = new Funcionario(null, "Thomaz", "21324654", LocalDate.now(),
+                "thomaz.carvalho@aluno.unincor.edu.br", "4564654897", "389102312749128903");
+         FuncionarioDao.inserirFuncionario(funcionario);
+
+        var funcionarios = funcionarioDao.buscarTodosFuncionarios();
+        System.out.println(funcionarios);
+        funcionarios.forEach(c -> System.out.println("Id: " + c.getIdFuncionario() + "/ Nome: " + c.getNome( ) + "/ Cpf: " + c.getCpf() + "/ Data de Nascimento: " + c.getDataNascimento() +
+              "/ Data de Nascimento: " + c.getDataNascimento()+ "/ Email: " + c.getEmail() + "/ Telefone: " + c.getTelefone() + "/ Senha: " + c.getSenhaHash() ));
+        
+        var f = FuncionarioDao.buscarFuncionarioPorId(1l);
         if (f != null) {
             System.out.println("Id: " + f.getIdFuncionario() + " - Nome: " + f.getNome());
         } else {
             System.out.println("Não tem funcionário");
         }
+         */
     }
-
-    /*public void buscarFuncionarioPorCpfFuncionario(String cpf) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    public List<Funcionario> listarTodasFuncionarios() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }*/
+    
 }
