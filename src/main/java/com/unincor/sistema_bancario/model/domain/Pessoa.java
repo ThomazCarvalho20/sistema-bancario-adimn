@@ -68,5 +68,5 @@ public abstract class Pessoa {
     public void setSenhaHash(String senhaHash) {
         this.senhaHash = senhaHash;
     }
-
+    
 }

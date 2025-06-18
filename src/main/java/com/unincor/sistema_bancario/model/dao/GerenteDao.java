@@ -5,6 +5,7 @@
 package com.unincor.sistema_bancario.model.dao;
 
 import com.unincor.sistema_bancario.configurations.MySQL;
+import com.unincor.sistema_bancario.model.domain.Agencia;
 import com.unincor.sistema_bancario.model.domain.Gerente;
 import java.sql.Connection;
 import java.sql.Date;
@@ -16,13 +17,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 /**
  *
  * @author Thomaz
  */
 public class GerenteDao {
-   
+
     public Gerente inserirGerente(Gerente gerente) throws SQLException {
         String sql = "INSERT INTO gerentes(nome, cpf, data_nascimento, email, "
                 + "telefone, senha_hash, id_agencia) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -33,30 +33,34 @@ public class GerenteDao {
             ps.setString(4, gerente.getEmail());
             ps.setString(5, gerente.getTelefone());
             ps.setString(6, gerente.getSenhaHash());
-            ps.setLong(7, gerente.getAgencia().getIdAgencia());
-            ps.execute();
+            /*o if ser ve para que o código não quebre na agência, não permitindo que o usuário cadastre um gerente sem agencia*/
+            if (gerente.getAgencia() != null) {
+                ps.setLong(7, gerente.getAgencia().getIdAgencia());
+                ps.execute();
+            } else {
+                ps.setObject(7, null);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(GerenteDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return gerente;
     }
-    
-    public List<Gerente> buscarTodosGerentes(){
-          List<Gerente> gerente = new ArrayList<>();
-          String sql = "SELECT * FROM gerentes";
-          try(Connection con = MySQL.connect();
-                PreparedStatement ps = con.prepareStatement(sql)){
-              ResultSet rs = ps.executeQuery();
-              while(rs.next()) {
-                  var cliente = construirGerenteSql(rs);
-                  gerente.add(cliente);
-              }
-          } catch (SQLException ex) {
+
+    public List<Gerente> buscarTodosGerentes() {
+        List<Gerente> gerentes = new ArrayList<>();
+        String sql = "SELECT * FROM gerentes";
+        try (Connection con = MySQL.connect(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                var gerente = construirGerenteSql(rs);
+                gerentes.add(gerente);
+            }
+        } catch (SQLException ex) {
             Logger.getLogger(GerenteDao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return gerente;
-      }
-    
+        return gerentes;
+    }
+
     public Gerente buscarGerentePorId(Long idGerente) {
         String sql = "SELECT * FROM gerentes WHERE id_gerente = ?";
         try (Connection con = MySQL.connect(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -80,24 +84,15 @@ public class GerenteDao {
         gerente.setEmail(rs.getString("email"));
         gerente.setTelefone(rs.getString("telefone"));
         gerente.setSenhaHash(rs.getString("senha_Hash"));
-        long idAgencia = rs.getLong("agencia");
+        /*buscar agência no banco de dados*/
+        Agencia agencia = new AgenciaDao().buscarAgenciaPorId(rs.getLong("id_agencia"));
+        gerente.setAgencia(agencia);
         return gerente;
     }
 
     public static void main(String[] args) {
-//        Gerente cliente = new Gerente(null, "Thomaz", "21324654", LocalDate.now(),
-//                "thomaz.carvalho@aluno.unincor.edu.br", "4564654897", "389102312749128903");
-        GerenteDao gerenteDao = new GerenteDao();
-//        var gerente = clienteDao.buscarTodosGerentes();
-//        System.out.println(gerente);
-//        gerente.forEach(c -> System.out.println("Id: " + c.getIdGerente() + "/ Nome: " + c.getNome( ) + "/ Cpf: " + c.getCpf() + "/ Data de Nascimento: " + c.getDataNascimento() +
-//              "/ Data de Nascimento: " + c.getDataNascimento()+ "/ Email: " + c.getEmail() + "/ Telefone: " + c.getTelefone() + "/ Senha: " + c.getSenhaHash() ));
-        var g = gerenteDao.buscarGerentePorId(1l);
-        if (g != null) {
-            System.out.println("Id: " + g.getIdGerente() + " - Nome: " + g.getNome());
-        } else {
-            System.out.println("Não tem gerente");
-        }
+        
+
     }
 
     /* Erro de que não tem o metodo, não criar, tem algo errado no services e não puxa o metodo domain

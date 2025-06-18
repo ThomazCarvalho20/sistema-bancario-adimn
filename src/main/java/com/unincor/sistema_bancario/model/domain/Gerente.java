@@ -10,6 +10,7 @@ import java.time.LocalDate;
  *
  * @author Thomaz
  */
+// extends é usado para puxar uma classe; aqui está puxando a de Pessoa
 public class Gerente extends Pessoa {
 
     private Long idGerente;

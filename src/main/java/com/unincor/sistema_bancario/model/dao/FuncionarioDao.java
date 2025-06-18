@@ -83,7 +83,6 @@ public class FuncionarioDao {
         funcionario.setTurno(rs.getString("turno"));
         return funcionario;
     }
-
    
     public static void main(String[] args) {
         /*
