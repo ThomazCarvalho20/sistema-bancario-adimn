@@ -7,10 +7,8 @@ package com.unincor.sistema_bancario.model.services;
 import com.unincor.sistema_bancario.exceptions.CadastroException;
 import com.unincor.sistema_bancario.model.dao.FuncionarioDao;
 import com.unincor.sistema_bancario.model.domain.Funcionario;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.time.LocalDate;
+
 
 /**
  *
@@ -18,47 +16,48 @@ import java.util.logging.Logger;
  */
 public class FuncionarioService {
     private final FuncionarioDao funcionarioDao = new FuncionarioDao();
-    private Object funcionarioBusca;
 
-    public void salvarFuncionario(Funcionario funcionario) throws CadastroException, SQLException {
-        if (funcionario.getCpf() == null || funcionario.getCpf().isBlank()) {
-            throw new CadastroException("Funcionario não possui" + "um cpf cadastrado!");
+    public void salvarFuncionario(Funcionario funcionario) throws CadastroException {
+        if (funcionario == null) {
+            throw new CadastroException("Funcionario informado inválido");
         }
 
-        // Criar uma validação se o cpf do funcionario já está cadastrado
-        funcionarioDao.buscarFuncionarioPorId(Long.MIN_VALUE);
-        if (funcionarioBusca != null) {
-            throw new CadastroException("o fucionário já tem um id");
-        }
-
-        // Validar se o funcionario está com telefone preenchidos
-        if (funcionario.getTelefone() == null || funcionario.getTelefone().isBlank()) {
-            throw new CadastroException("O funcionario não possui" + "um telefone informado!");
-        }
         // is.Blank() - verificar se uma String está vazia ou contém apenas espaços em branco (ou outros caracteres considerados "brancos", como tabulações e quebras de linha).
-        if (funcionario.getTurno() == null || funcionario.getTurno().isBlank()) {
-            throw new CadastroException("O funcionario não possui" + "um turno!");
+        if (funcionario.getNome() != null || funcionario.getNome().isBlank()) {
+            throw new CadastroException("Nome não foi informado");
         }
 
+        if (funcionario.getCpf() == null || funcionario.getCpf().isBlank()) {
+            throw new CadastroException("Cpf não foi informado");
+        }
+
+        if (funcionarioDao.buscarFuncionarioPorCpf(funcionario.getCpf()) != null ) {
+            throw new CadastroException("Cpf já cadastrado");
+        }
+        
+        if (funcionarioDao.buscarFuncionarioPorEmail(funcionario.getEmail()) != null ) {
+            throw new CadastroException("Email já cadastrado");
+        }
+        
         funcionarioDao.inserirFuncionario(funcionario);
 
     }
 
-    public List<Funcionario> buscarTodosFuncionarios() {
-
-        return funcionarioDao.buscarTodosFuncionarios();
-
-    }
-
-    public static void main(String[] args) throws SQLException {
-        FuncionarioService funcionarioService = new FuncionarioService();
-
-        Funcionario funcionario = new Funcionario();
-
+    public static void main(String[] args) {
         try {
+            var funcionario = new Funcionario();
+            funcionario.setNome("Thomaz");
+            funcionario.setCpf("15018845622");
+            funcionario.setDataNascimento(LocalDate.now());
+            funcionario.setEmail("thomaz@gmail.com");
+            funcionario.setSenhaHash("senhasenha");
+            funcionario.setTelefone("35997412805");
+            funcionario.setTurno("Noturno");
+            
+            FuncionarioService funcionarioService = new FuncionarioService();
             funcionarioService.salvarFuncionario(funcionario);
         } catch (CadastroException ex) {
-            Logger.getLogger(FuncionarioService.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
         }
     }
 }

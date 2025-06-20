@@ -19,7 +19,6 @@ import java.util.logging.Logger;
 public class AgenciaService {
     
     private final AgenciaDao agenciaDao = new AgenciaDao();
-    private Object agenciaBusca;
     
     public void salvarAgencia(Agencia agencia) throws CadastroException {
         if (agencia.getCodigoAgencia() == null || agencia.getCodigoAgencia() .isBlank()) {
@@ -28,18 +27,17 @@ public class AgenciaService {
         
         
         // Criar uma validação se o código da agência já está cadastrado
-        agenciaDao.buscarClientePorCodigoAgencia(agencia.getCodigoAgencia());
+        Agencia agenciaBusca = agenciaDao.buscarAgenciaPorCodigoAgencia(agencia.getCodigoAgencia());
         if (agenciaBusca != null) {
             throw new CadastroException("Código de Agência já está cadastrado!");
         }
         
         // Validar se a agência está com Cidade e UF preenchidos
         if (agencia.getCidade() == null || agencia.getCidade() .isBlank()) {
-            throw new CadastroException ("A agência não possui" + "uma cidade informada!");
+            throw new CadastroException ("A agência não possui uma cidade informada!");
         }
-        // verificar se uma String está vazia ou contém apenas espaços em branco (ou outros caracteres considerados "brancos", como tabulações e quebras de linha).
-         if (agencia.getUf() == null || agencia.getUf() .isBlank()) {
-            throw new CadastroException ("A agência não possui" + "um estado!");
+        if (agencia.getUf()== null || agencia.getUf().isBlank()) {
+            throw new CadastroException("A agência não possui uma UF informada");
         }
 
         agenciaDao.inserirAgencia(agencia);
@@ -55,7 +53,7 @@ public class AgenciaService {
     public static void main(String[] args)  {
         AgenciaService agenciaService = new AgenciaService();
         
-        Agencia agencia = new Agencia(null, null, "Caxambu", "MG", "Rua João Pinheiro", "641", "37440000");
+        Agencia agencia = new Agencia(null, null, "Itajuba", "MG", "Rua de itajuba", "587", "37456235");
         
         try {
             agenciaService.salvarAgencia(agencia);

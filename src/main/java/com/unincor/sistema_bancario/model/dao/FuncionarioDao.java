@@ -70,7 +70,37 @@ public class FuncionarioDao {
         }
         return null;
     }
-
+    
+    public Funcionario buscarFuncionarioPorCpf(String cpf) {
+        String sql = "SELECT * FROM funcionarios WHERE cpf = ?";
+        try (Connection con = MySQL.connect(); PreparedStatement ps = con.prepareStatement(sql)) {
+            /*setLong - Não da certo se for null / setObject - executa com o valor null*/
+            ps.setString(1, cpf);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return construirFuncionarioSql(rs);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FuncionarioDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public Funcionario buscarFuncionarioPorEmail(String email) {
+        String sql = "SELECT * FROM funcionarios WHERE email = ?";
+        try (Connection con = MySQL.connect(); PreparedStatement ps = con.prepareStatement(sql)) {
+            /*setLong - Não da certo se for null / setObject - executa com o valor null*/
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return construirFuncionarioSql(rs);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FuncionarioDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     private Funcionario construirFuncionarioSql(ResultSet rs) throws SQLException {
         Funcionario funcionario = new Funcionario();
         funcionario.setIdFuncionario(rs.getLong("id_funcionario"));
@@ -84,24 +114,30 @@ public class FuncionarioDao {
         return funcionario;
     }
    
-    public static void main(String[] args) {
-        /*
-        Funcionario funcionario = new Funcionario(null, "Thomaz", "21324654", LocalDate.now(),
-                "thomaz.carvalho@aluno.unincor.edu.br", "4564654897", "389102312749128903");
-         FuncionarioDao.inserirFuncionario(funcionario);
-
-        var funcionarios = funcionarioDao.buscarTodosFuncionarios();
-        System.out.println(funcionarios);
-        funcionarios.forEach(c -> System.out.println("Id: " + c.getIdFuncionario() + "/ Nome: " + c.getNome( ) + "/ Cpf: " + c.getCpf() + "/ Data de Nascimento: " + c.getDataNascimento() +
-              "/ Data de Nascimento: " + c.getDataNascimento()+ "/ Email: " + c.getEmail() + "/ Telefone: " + c.getTelefone() + "/ Senha: " + c.getSenhaHash() ));
+    public static void main(String[] args) throws SQLException {
+        // Criando um funcionário para inserir
+        var funcionario = new Funcionario();
+        funcionario.setNome("Thomaz");
+        funcionario.setCpf("15018874566");
+        funcionario.setDataNascimento(LocalDate.now());
+        funcionario.setEmail("nelore@gmail.com");
+        funcionario.setSenhaHash("senhanaotem");
+        funcionario.setTelefone("359987412980");
+        funcionario.setTurno("Diurno");
         
-        var f = FuncionarioDao.buscarFuncionarioPorId(1l);
-        if (f != null) {
-            System.out.println("Id: " + f.getIdFuncionario() + " - Nome: " + f.getNome());
-        } else {
-            System.out.println("Não tem funcionário");
-        }
-         */
+        var funcionarioDao = new FuncionarioDao();
+        //INseriu o funcionário
+        funcionarioDao.inserirFuncionario(funcionario);
+        System.out.println("=============================");
+        
+        //Listar todos os funcionários
+        var funcionarios = funcionarioDao.buscarTodosFuncionarios();
+        funcionarios.forEach(System.out::println);
+        System.out.println("==============================");
+        
+        //Buscar tosos os gerentes
+        var funcionarioBusca = funcionarioDao.buscarFuncionarioPorId(1l);
+        System.out.println(funcionarioBusca);
     }
     
 }

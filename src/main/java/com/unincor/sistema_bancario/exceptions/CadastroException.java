@@ -8,6 +8,7 @@ package com.unincor.sistema_bancario.exceptions;
  *
  * @author Thomaz
  */
+/*Classe para dar mensagens de erro no código (sql, conversão de data e entre outros)*/
 public class CadastroException extends Exception{
 
     public CadastroException(String message) {

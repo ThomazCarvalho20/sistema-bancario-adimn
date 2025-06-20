@@ -69,4 +69,8 @@ public abstract class Pessoa {
         this.senhaHash = senhaHash;
     }
     
+    @Override
+    public String toString(){
+        return "Pessoa{"+ "nome=" + nome + ", cpf=" + cpf + ", dataNascimento=" + dataNascimento + ", email=" + email + ", telefone=" + telefone + ", senhaHash=" + senhaHash + "}";
+    }
 }

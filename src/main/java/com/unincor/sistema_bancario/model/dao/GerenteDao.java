@@ -12,6 +12,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -23,7 +24,7 @@ import java.util.logging.Logger;
  */
 public class GerenteDao {
 
-    public Gerente inserirGerente(Gerente gerente) throws SQLException {
+    public Gerente inserirGerente(Gerente gerente){
         String sql = "INSERT INTO gerentes(nome, cpf, data_nascimento, email, "
                 + "telefone, senha_hash, id_agencia) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection con = MySQL.connect(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -36,14 +37,13 @@ public class GerenteDao {
             /*o if ser ve para que o código não quebre na agência, não permitindo que o usuário cadastre um gerente sem agencia*/
             if (gerente.getAgencia() != null) {
                 ps.setLong(7, gerente.getAgencia().getIdAgencia());
-                ps.execute();
             } else {
                 ps.setObject(7, null);
             }
+            ps.execute();
         } catch (SQLException ex) {
             Logger.getLogger(GerenteDao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return gerente;
     }
 
     public List<Gerente> buscarTodosGerentes() {
@@ -75,6 +75,34 @@ public class GerenteDao {
         return null;
     }
 
+    public Gerente buscarGerentePorCpf(String cpf) {
+        String sql = "SELECT * FROM gerentes WHERE cpf = ?";
+        try (Connection con = MySQL.connect(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, cpf);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return construirGerenteSql(rs);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GerenteDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public Gerente buscarGerentePorEmail(String email) {
+        String sql = "SELECT * FROM gerentes WHERE email = ?";
+        try (Connection con = MySQL.connect(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return construirGerenteSql(rs);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GerenteDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
     private Gerente construirGerenteSql(ResultSet rs) throws SQLException {
         Gerente gerente = new Gerente();
         gerente.setIdGerente(rs.getLong("id_gerente"));
@@ -91,7 +119,30 @@ public class GerenteDao {
     }
 
     public static void main(String[] args) {
-        
+        // Crinado um gerente para inserir
+        var gerente = new Gerente();
+        gerente.setNome("João");
+        gerente.setCpf("14725836955");
+        gerente.setDataNascimento(LocalDate.now());
+        gerente.setEmail("joao@gmail.com");
+        gerente.setSenhaHash("essetemsenha");
+        gerente.setTelefone("35974122589");
+        var agencia = new AgenciaDao().buscarAgenciaPorId(2l);
+        gerente.setAgencia(agencia);
+
+        //Verificar se o gerente foi inserido
+        var gerenteDao = new GerenteDao();
+        gerenteDao.inserirGerente(gerente);
+        System.out.println("==============================");
+
+        //Listou todos gerente
+        var gerentes = gerenteDao.buscarTodosGerentes();
+        gerentes.forEach(System.out::println);
+        System.out.println("================================");
+
+        //Buscar todos os gerentes
+        var gerenteBusca = gerenteDao.buscarGerentePorId(2l);
+        System.out.println(gerenteBusca);
 
     }
 

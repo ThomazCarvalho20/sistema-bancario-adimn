@@ -12,10 +12,6 @@ import java.time.LocalDate;
 public class Funcionario extends Pessoa{
     private Long idFuncionario;
     protected String turno;
-    
-    public Funcionario(){
-        
-    }
 
     public Long getIdFuncionario() {
         return idFuncionario;
@@ -32,8 +28,10 @@ public class Funcionario extends Pessoa{
     public void setTurno(String turno) {
         this.turno = turno;
     }
-    
 
-    
-
+    @Override
+    public String toString(){
+        return "Funcioanrio{" + super.toString() + " - " + "idFuncionario=" + idFuncionario + ", turno=" + turno + "}";
+    }
+   
 }

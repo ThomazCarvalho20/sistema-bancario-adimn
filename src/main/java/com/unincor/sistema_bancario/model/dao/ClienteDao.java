@@ -71,6 +71,36 @@ public class ClienteDao {
         return null;
       }
        
+       public Cliente buscarClientePorCpf(String cpf){
+          String sql = "SELECT * FROM clientes WHERE cpf = ?";
+          try(Connection con = MySQL.connect();
+                PreparedStatement ps = con.prepareStatement(sql)){
+                ps.setString(1, cpf);
+              ResultSet rs = ps.executeQuery();
+              if (rs.next()) {
+                  return construirClienteSql(rs);
+              }
+          } catch (SQLException ex) {
+            Logger.getLogger(ClienteDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+      }
+       
+       public Cliente buscarClientePorEmail(String email){
+          String sql = "SELECT * FROM clientes WHERE email = ?";
+          try(Connection con = MySQL.connect();
+                PreparedStatement ps = con.prepareStatement(sql)){
+                ps.setString(1, email);
+              ResultSet rs = ps.executeQuery();
+              if (rs.next()) {
+                  return construirClienteSql(rs);
+              }
+          } catch (SQLException ex) {
+            Logger.getLogger(ClienteDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+      }
+       
        public Cliente construirClienteSql(ResultSet rs) throws SQLException{
        Cliente cliente = new Cliente();
                   cliente.setIdCliente(rs.getLong("id_cliente"));

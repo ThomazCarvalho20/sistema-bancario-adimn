@@ -5,60 +5,62 @@
 package com.unincor.sistema_bancario.model.services;
 
 import com.unincor.sistema_bancario.exceptions.CadastroException;
+import com.unincor.sistema_bancario.model.dao.AgenciaDao;
 import com.unincor.sistema_bancario.model.dao.GerenteDao;
 import com.unincor.sistema_bancario.model.domain.Gerente;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.time.LocalDate;
+
 
 /**
  *
  * @author Thomaz
  */
 public class GerenteService {
-     private final GerenteDao gerenteDao = new GerenteDao();
-    private Object gerenteBuscar;
+     public GerenteDao gerenteDao = new GerenteDao();
 
-    public void salvarGerente(Gerente gerente) throws CadastroException, SQLException {
+    public void salvarGerente(Gerente gerente) throws CadastroException {
+        if (gerente == null) {
+            throw new CadastroException("Gerente informado inválido");
+        }
+
+        if (gerente.getNome() != null || gerente.getCpf().isBlank()) {
+            throw new CadastroException("Nome não informado");
+        }
+
         if (gerente.getCpf() == null || gerente.getCpf().isBlank()) {
-            throw new CadastroException("Gerente não possui" + "um cpf cadastrado!");
+            throw new CadastroException("Cpf não informado");
         }
 
-        // Criar uma validação se o id do gerente já está cadastrado
-        gerenteDao.buscarGerentePorId(gerente.getIdGerente());
-        if (gerenteBuscar != null) {
-            throw new CadastroException("ID de Gerente já está cadastrado!");
+        if (gerenteDao.buscarGerentePorCpf(gerente.getCpf())== null) {
+            throw new CadastroException("Cpf já cadastrado");
         }
-
-        // Validar se o gerente está com telefone preenchidos
-        if (gerente.getTelefone() == null || gerente.getTelefone().isBlank()) {
-            throw new CadastroException("O gerente não possui" + "um telefone informado!");
-        }
-        // is.Blank() - verificar se uma String está vazia ou contém apenas espaços em branco (ou outros caracteres considerados "brancos", como tabulações e quebras de linha).
-        if (gerente.getAgencia()== null || gerente.getAgencia().getNumero().isBlank()) {
-            throw new CadastroException("O gerente não possui" + "uma agência!");
+        
+        if (gerenteDao.buscarGerentePorEmail(gerente.getEmail())== null) {
+            throw new CadastroException("Email já cadastrado");
         }
 
         gerenteDao.inserirGerente(gerente);
 
     }
 
-    public List<Gerente> buscarGerentes() {
-
-        return gerenteDao.buscarTodosGerentes();
-
-    }
-
-    public static void main(String[] args) throws SQLException {
-        GerenteService gerenteService = new GerenteService();
-
-        Gerente gerente = new Gerente();
-
+    public static void main(String[] args) {
         try {
+            var gerente = new Gerente();
+            gerente.setNome("Thomaz");
+            gerente.setCpf("15918845655");
+            gerente.setDataNascimento(LocalDate.now());
+            gerente.setEmail("thomaz@gmail.com");
+            gerente.setSenhaHash("senha123");
+            gerente.setTelefone("35997412806");
+            
+            var agencia = new AgenciaDao().buscarAgenciaPorId(2l);
+            gerente.setAgencia(agencia);
+            
+            GerenteService gerenteService = new GerenteService();
             gerenteService.salvarGerente(gerente);
+            
         } catch (CadastroException ex) {
-            Logger.getLogger(GerenteService.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
         }
     }
 }
