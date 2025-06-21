@@ -4,10 +4,15 @@
  */
 package com.unincor.sistema_bancario.model.domain;
 
+import lombok.Data;
+import lombok.Getter;
+
+
 /**
  *
  * @author Thomaz
  */
+@Data
 public class Agencia {
     
     private Long idAgencia;

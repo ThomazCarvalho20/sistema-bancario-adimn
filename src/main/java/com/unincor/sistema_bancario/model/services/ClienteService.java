@@ -23,7 +23,7 @@ public class ClienteService {
             throw new CadastroException("Cliente informado inválido");
         }
 
-        if (cliente.getNome() != null || cliente.getNome().isBlank()) {
+        if (cliente.getNome() == null || cliente.getNome().isBlank()) {
             throw new CadastroException("O nome não foi infomrado");
         }
 

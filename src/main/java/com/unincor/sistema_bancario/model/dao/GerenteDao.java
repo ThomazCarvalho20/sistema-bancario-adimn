@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  */
 public class GerenteDao {
 
-    public Gerente inserirGerente(Gerente gerente){
+    public void inserirGerente(Gerente gerente){
         String sql = "INSERT INTO gerentes(nome, cpf, data_nascimento, email, "
                 + "telefone, senha_hash, id_agencia) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection con = MySQL.connect(); PreparedStatement ps = con.prepareStatement(sql)) {

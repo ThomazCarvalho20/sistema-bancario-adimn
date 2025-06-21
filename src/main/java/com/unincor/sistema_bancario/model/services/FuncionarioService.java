@@ -7,7 +7,10 @@ package com.unincor.sistema_bancario.model.services;
 import com.unincor.sistema_bancario.exceptions.CadastroException;
 import com.unincor.sistema_bancario.model.dao.FuncionarioDao;
 import com.unincor.sistema_bancario.model.domain.Funcionario;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -23,7 +26,7 @@ public class FuncionarioService {
         }
 
         // is.Blank() - verificar se uma String está vazia ou contém apenas espaços em branco (ou outros caracteres considerados "brancos", como tabulações e quebras de linha).
-        if (funcionario.getNome() != null || funcionario.getNome().isBlank()) {
+        if (funcionario.getNome() == null || funcionario.getNome().isBlank()) {
             throw new CadastroException("Nome não foi informado");
         }
 

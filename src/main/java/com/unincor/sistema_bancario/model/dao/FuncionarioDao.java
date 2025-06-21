@@ -22,8 +22,8 @@ import java.util.logging.Logger;
  * @author Thomaz
  */
 public class FuncionarioDao {
-
-    public Funcionario inserirFuncionario(Funcionario funcionario) throws SQLException {
+    //throws exception - 
+    public Funcionario inserirFuncionario(Funcionario funcionario) {
         String sql = "INSERT INTO funcionarios(nome, cpf, data_nascimento, email, "
                 + "telefone, senha_hash, turno) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection con = MySQL.connect(); PreparedStatement ps = con.prepareStatement(sql)) {

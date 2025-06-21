@@ -53,7 +53,7 @@ public class AgenciaService {
     public static void main(String[] args)  {
         AgenciaService agenciaService = new AgenciaService();
         
-        Agencia agencia = new Agencia(null, null, "Itajuba", "MG", "Rua de itajuba", "587", "37456235");
+        Agencia agencia = new Agencia(null, "1547", "Itajuba", "MG", "Rua de itajuba", "587", "37456235");
         
         try {
             agenciaService.salvarAgencia(agencia);

@@ -70,11 +70,11 @@ public class AgenciaDao {
         return null;
     }
     
-    public Agencia buscarAgenciaPorCodigoAgencia(String codigoAgecia) {
+    public Agencia buscarAgenciaPorCodigoAgencia(String id_agencia) {
         String sql = "SELECT * FROM Agencias where codigo_agencia = ?";
         try(Connection con = MySQL.connect(); 
                 PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, codigoagencia);
+            ps.setString(1, id_agencia);
             ResultSet rs = ps.executeQuery();
             if(rs.next()) {
                 return construirAgenciaSql(rs);
@@ -112,7 +112,7 @@ public class AgenciaDao {
         
         // Teste buscar agencias por Id
         System.out.println("Teste buscar Agencias por Id");
-        Agencia ag = agenciaDao.buscarAgenciaPorCodigoAgencia(1l);
+        Agencia ag = agenciaDao.buscarAgenciaPorCodigoAgencia("1");
         System.out.println("Codigo : " + ag.getCodigoAgencia());
         
         

@@ -23,7 +23,7 @@ public class GerenteService {
             throw new CadastroException("Gerente informado inválido");
         }
 
-        if (gerente.getNome() != null || gerente.getCpf().isBlank()) {
+        if (gerente.getNome() == null || gerente.getCpf().isBlank()) {
             throw new CadastroException("Nome não informado");
         }
 
@@ -31,11 +31,11 @@ public class GerenteService {
             throw new CadastroException("Cpf não informado");
         }
 
-        if (gerenteDao.buscarGerentePorCpf(gerente.getCpf())== null) {
+        if (gerenteDao.buscarGerentePorCpf(gerente.getCpf())!= null) {
             throw new CadastroException("Cpf já cadastrado");
         }
         
-        if (gerenteDao.buscarGerentePorEmail(gerente.getEmail())== null) {
+        if (gerenteDao.buscarGerentePorEmail(gerente.getEmail())!= null) {
             throw new CadastroException("Email já cadastrado");
         }
 
@@ -47,7 +47,7 @@ public class GerenteService {
         try {
             var gerente = new Gerente();
             gerente.setNome("Thomaz");
-            gerente.setCpf("15918845655");
+            gerente.setCpf("15485658955");
             gerente.setDataNascimento(LocalDate.now());
             gerente.setEmail("thomaz@gmail.com");
             gerente.setSenhaHash("senha123");
