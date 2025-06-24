@@ -34,7 +34,7 @@ public class Gerente extends Pessoa {
     public void setAgencia(Agencia agencia) {
         this.agencia = agencia;
     }
-
+    // @Override - teste de apresentação na IDE
     @Override
     public String toString() {
         return "Gerente{" + super.toString() + "idGerente=" + idGerente + ", agencia=" + agencia + "}";
